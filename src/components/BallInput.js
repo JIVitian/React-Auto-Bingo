@@ -5,12 +5,10 @@ const BallInput = ({ setBall }) => {
     const key = event.key;
     const value = event.target.value;
 
-    if (key === "Enter") {
-      if (value >= 1 && value <= 90) {
-        setBall(value);
-        // Reset the input
-        event.target.value = "";
-      }
+    if (key === "Enter" && value >= 1 && value <= 90) {
+      setBall(value);
+      // Reset the input
+      event.target.value = "";
     }
 
     if (
@@ -19,7 +17,7 @@ const BallInput = ({ setBall }) => {
       value + key < 1 ||
       value + key > 90
     ) {
-      // the new digit is ignored
+      // The new digit is ignored
       event.preventDefault();
     }
   };
