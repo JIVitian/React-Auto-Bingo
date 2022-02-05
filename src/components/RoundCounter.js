@@ -7,7 +7,7 @@ const RoundCounter = ({ round, setRound }) => {
 
   const increaseRound = () => {
     if (round < 10) {
-      setRound(round + 1);
+      setRound(+round + 1);
     }
   };
 
@@ -16,7 +16,14 @@ const RoundCounter = ({ round, setRound }) => {
       <button className="ronda-btn" onClick={decreaseRound}>
         -
       </button>
-      <input type="number" min="1" max="10" placeholder="Ronda" value={round} />
+      <input
+        type="number"
+        min="1"
+        max="10"
+        placeholder="Ronda"
+        value={round}
+        readOnly
+      />
       <button className="ronda-btn" onClick={increaseRound}>
         +
       </button>

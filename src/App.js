@@ -1,19 +1,13 @@
 import "./App.css";
-import RoundCounter from "./components/RoundCounter";
-import React, { useState } from "react";
+import AutoBingo from "./components/AutoBingo";
 
 function App() {
-  const [round, setRound] = useState(1);
-
   return (
     <div className="App">
       <header className="App-header">
         <h1>AutoBingo</h1>
-        <RoundCounter round={round} setRound={setRound} />
+        <AutoBingo />
       </header>
-      <main>
-        <section></section>
-      </main>
     </div>
   );
 }
