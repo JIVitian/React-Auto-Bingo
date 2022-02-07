@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import BallInput from "./BallInput";
 import Bingo from "./Bingo";
+import RandomBingoButton from "./RandomBingoButtom";
 import RoundCounter from "./RoundCounter";
+
+const bingosList = [];
 
 const AutoBingo = () => {
   const [round, setRound] = useState("");
@@ -21,11 +24,16 @@ const AutoBingo = () => {
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   ];
 
+  bingosList.push({ bingoId: idBingo, numbers, grid });
+
   return (
     <section>
       <BallInput setBall={setBall} />
       <RoundCounter round={round} setRound={setRound} />
-      <Bingo idBingo={idBingo} numbers={numbers} grid={grid} />
+      {bingosList.map(({ bingoId, numbers, grid }) => (
+        <Bingo idBingo={bingoId} numbers={numbers} grid={grid} />
+      ))}
+      <RandomBingoButton bingosList={bingosList} />
     </section>
   );
 };
