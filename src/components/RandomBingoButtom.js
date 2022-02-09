@@ -1,6 +1,6 @@
 import { quickSort } from "../utils/utils";
 
-const RandomBingoButton = ({ bingosList }) => {
+const RandomBingoButton = ({ bingosList, setBingosList }) => {
   const newRandomBingo = () => {
     const randomId = Math.round(Math.random() * 9999 + 1);
     let randomNumbers = [];
@@ -17,13 +17,14 @@ const RandomBingoButton = ({ bingosList }) => {
 
     randomNumbers = quickSort(randomNumbers);
 
-    bingosList.push({
-      bingoId: randomId,
-      numbers: randomNumbers,
-      grid: defaultGrid,
-    });
-
-    console.log(bingosList);
+    setBingosList([
+      ...bingosList,
+      {
+        bingoId: randomId,
+        numbers: randomNumbers,
+        grid: defaultGrid,
+      },
+    ]);
   };
 
   return <button onClick={newRandomBingo}>Aleatorio</button>;
