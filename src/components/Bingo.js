@@ -4,16 +4,16 @@ const Bingo = ({ idBingo, numbers, grid }) => {
       <caption>N° {idBingo}</caption>
       <thead>
         <tr>
-          {numbers.map((number) => (
-            <th>{number}</th>
+          {numbers.map((number, index) => (
+            <th key={index}>{number}</th>
           ))}
         </tr>
       </thead>
       <tbody>
-        {grid.map((row) => (
-          <tr>
-            {row.map((cell) => (
-              <td>{cell ? "X" : ""}</td>
+        {grid.map((row, rowId) => (
+          <tr key={rowId}>
+            {row.map((cell,cellId) => (
+              <td key={cellId}>{cell ? "X" : ""}</td>
             ))}
           </tr>
         ))}

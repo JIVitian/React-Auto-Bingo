@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import BallInput from "./BallInput";
 import Bingo from "./Bingo";
 import RandomBingoButton from "./RandomBingoButtom";
@@ -14,7 +14,7 @@ const AutoBingo = () => {
       <BallInput setBall={setBall} />
       <RoundCounter round={round} setRound={setRound} />
       {bingosList.map(({ bingoId, numbers, grid }) => (
-        <Bingo idBingo={bingoId} numbers={numbers} grid={grid} />
+        <Bingo key={bingoId} idBingo={bingoId} numbers={numbers} grid={grid} />
       ))}
       <RandomBingoButton
         bingosList={bingosList}
