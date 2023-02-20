@@ -13,7 +13,10 @@ const RoundCounter = ({ round, setRound }) => {
 
   return (
     <div className="round-container">
-      <button className="ronda-btn" onClick={decreaseRound}>
+      <button
+        className="ronda-btn"
+        onClick={decreaseRound}
+      >
         -
       </button>
       <input
@@ -24,7 +27,10 @@ const RoundCounter = ({ round, setRound }) => {
         value={round}
         readOnly
       />
-      <button className="ronda-btn" onClick={increaseRound}>
+      <button
+        className="ronda-btn"
+        onClick={increaseRound}
+      >
         +
       </button>
     </div>

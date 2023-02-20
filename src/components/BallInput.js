@@ -1,14 +1,14 @@
 const BallInput = ({ setBall }) => {
-  const isNumber = (value) => /\d/.test(value);
+  const isNumber = value => /\d/.test(value);
 
-  const handleChange = (event) => {
+  const handleChange = event => {
     const key = event.key;
     const value = event.target.value;
 
-    if (key === "Enter" && value >= 1 && value <= 90) {
+    if (key === 'Enter' && value >= 1 && value <= 90) {
       setBall(value);
       // Reset the input
-      event.target.value = "";
+      event.target.value = '';
     }
 
     if (
@@ -22,7 +22,14 @@ const BallInput = ({ setBall }) => {
     }
   };
 
-  return <input type="number" min="1" max="90" onKeyPress={handleChange} />;
+  return (
+    <input
+      type="number"
+      min="1"
+      max="90"
+      onKeyPress={handleChange}
+    />
+  );
 };
 
 export default BallInput;

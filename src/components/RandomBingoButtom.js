@@ -1,4 +1,4 @@
-import { quickSort } from "../utils/utils";
+import { quickSort } from '../utils/utils';
 
 const RandomBingoButton = ({ bingosList, setBingosList }) => {
   const newRandomBingo = () => {
@@ -10,7 +10,7 @@ const RandomBingoButton = ({ bingosList, setBingosList }) => {
     for (let i = 0; i < 10; i++) {
       let rand = Math.round(Math.random() * 89 + 1);
 
-      if (!randomNumbers.some((number) => number === rand)) {
+      if (!randomNumbers.some(number => number === rand)) {
         randomNumbers.push(rand);
       } else i--;
     }

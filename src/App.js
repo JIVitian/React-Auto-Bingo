@@ -1,5 +1,5 @@
-import "./App.css";
-import AutoBingo from "./components/AutoBingo";
+import './App.css';
+import AutoBingo from './components/AutoBingo';
 
 function App() {
   return (

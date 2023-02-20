@@ -12,8 +12,8 @@ const Bingo = ({ idBingo, numbers, grid }) => {
       <tbody>
         {grid.map((row, rowId) => (
           <tr key={rowId}>
-            {row.map((cell,cellId) => (
-              <td key={cellId}>{cell ? "X" : ""}</td>
+            {row.map((cell, cellId) => (
+              <td key={cellId}>{cell ? 'X' : ''}</td>
             ))}
           </tr>
         ))}
