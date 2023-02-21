@@ -39,6 +39,7 @@ const AutoBingo = () => {
     <section>
       <NewBingoModal handleNewBingo={addNewBingo} />
       <BallInput
+        value={ball}
         setValue={setBall}
         min={1}
         max={90}
@@ -47,18 +48,21 @@ const AutoBingo = () => {
         round={round}
         setRound={setRound}
       />
+      <RandomBingoButton
+        bingosList={bingosList}
+        handleNewBingo={addNewBingo}
+      />
       {bingosList.map(({ bingoId, numbers, grid }) => (
         <Bingo
           key={bingoId}
           idBingo={bingoId}
           numbers={numbers}
           grid={grid}
+          onDelete={() =>
+            setBingosList(bingosList.filter(b => b.bingoId !== bingoId))
+          }
         />
       ))}
-      <RandomBingoButton
-        bingosList={bingosList}
-        handleNewBingo={addNewBingo}
-      />
     </section>
   );
 };
