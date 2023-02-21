@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { createEmptyGrid, createEmptyRow } from '../utils/grid-utils';
 import { quickSort } from '../utils/utils';
 import BallInput from './BallInput';
 
-const NewBingoModal = ({ handleNewBingo }) => {
+const NewBingoModal = ({ handleSubmit, bingo }) => {
   const [numbers, setNumbers] = useState(createEmptyRow(10, ''));
   const [bingoId, setbingoId] = useState('');
 
@@ -13,7 +13,7 @@ const NewBingoModal = ({ handleNewBingo }) => {
     setNumbers(newNumbers);
   };
 
-  const handleSubmit = e => {
+  const submitForm = e => {
     e.preventDefault();
     if (!bingoId || numbers.some(x => !x)) {
       alert('Complete todos los campos');
@@ -25,15 +25,20 @@ const NewBingoModal = ({ handleNewBingo }) => {
       return;
     }
 
-    handleNewBingo({
+    handleSubmit({
       numbers: quickSort(numbers.map(Number)),
       bingoId,
-      grid: createEmptyGrid(),
+      grid: bingo.grid || createEmptyGrid(),
     });
   };
 
+  useEffect(() => {
+    setNumbers(bingo.numbers || createEmptyRow(10, ''));
+    setbingoId(bingo.bingoId || '');
+  }, [bingo]);
+
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={submitForm}>
       <h3>Nuevo Bingo</h3>
       <div>
         <h4 htmlFor="bingoId">N°</h4>

@@ -1,13 +1,14 @@
-const Bingo = ({ idBingo, numbers, grid, onDelete }) => {
+const Bingo = ({ bingoId, numbers, grid, onDelete, onEdit }) => {
   return (
     <>
       <div>
-        <button
-          onClick={() => onDelete(idBingo)}
-        >Borrar</button>
+        <button onClick={() => onEdit({ bingoId, numbers, grid })}>
+          Editar
+        </button>
+        <button onClick={() => onDelete(bingoId)}>Borrar</button>
       </div>
-      <table id={idBingo}>
-        <caption>N° {idBingo}</caption>
+      <table id={bingoId}>
+        <caption>N° {bingoId}</caption>
         <thead>
           <tr>
             {numbers.map((number, index) => (

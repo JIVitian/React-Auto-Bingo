@@ -9,9 +9,31 @@ const AutoBingo = () => {
   const [round, setRound] = useState(1);
   const [ball, setBall] = useState('');
   const [bingosList, setBingosList] = useState([]);
+  const [bingoToUpdate, setBingoToUpdate] = useState({});
 
   const addNewBingo = newBingo => {
+    if (bingoToUpdate?.bingoId) {
+      setBingosList(
+        bingosList.map(bingo =>
+          bingo.bingoId === bingoToUpdate.bingoId ? newBingo : bingo
+        )
+      );
+
+      setBingoToUpdate({});
+
+      return;
+    }
+
+    if (bingosList.some(bingo => bingo.bingoId === newBingo.bingoId)) {
+      alert('Ya existe un bingo con ese número');
+      return;
+    }
+
     setBingosList([...bingosList, newBingo]);
+  };
+
+  const handleEditBingo = bingo => {
+    setBingoToUpdate(bingo);
   };
 
   // Update the grid of every bingo when the ball value changes
@@ -37,7 +59,10 @@ const AutoBingo = () => {
 
   return (
     <section>
-      <NewBingoModal handleNewBingo={addNewBingo} />
+      <NewBingoModal
+        handleSubmit={addNewBingo}
+        bingo={bingoToUpdate}
+      />
       <BallInput
         value={ball}
         setValue={setBall}
@@ -55,12 +80,13 @@ const AutoBingo = () => {
       {bingosList.map(({ bingoId, numbers, grid }) => (
         <Bingo
           key={bingoId}
-          idBingo={bingoId}
+          bingoId={bingoId}
           numbers={numbers}
           grid={grid}
           onDelete={() =>
             setBingosList(bingosList.filter(b => b.bingoId !== bingoId))
           }
+          onEdit={handleEditBingo}
         />
       ))}
     </section>
