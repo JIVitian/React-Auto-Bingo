@@ -1,28 +1,30 @@
 const BallInput = ({
+  value,
   setValue,
   min = 1,
   max = 90,
   saveOnEnter = true,
+  name
 }) => {
   const isNumber = value => /\d/.test(value);
 
   const handleKeyDown = event => {
     const key = event.key;
-    const value = event.target.value;
+    const newValue = event.target.value;
 
     if (key === 'Backspace') return;
 
     if (key === 'Enter' && saveOnEnter) {
+      setValue(newValue);
+      
       // Reset the input
       event.target.value = '';
-      setValue(value);
     }
 
     if (
       !isNumber(key) ||
-      value.length > max.toString().length ||
-      value + key < min ||
-      value + key > max
+      newValue + key < min ||
+      newValue + key > max
     ) {
       // The new digit is ignored
       event.preventDefault();
@@ -31,17 +33,18 @@ const BallInput = ({
 
   const handleChange = event => {
     if (saveOnEnter) return;
-
     setValue(event.target.value);
   };
 
   return (
     <input
       type="number"
+      value={value}
       min={min}
       max={max}
       onKeyDown={handleKeyDown}
-      onChange={event => handleChange(event)}
+      onChange={handleChange}
+      name={name}
     />
   );
 };
