@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import BallInput from './BallInput';
 import Bingo from './Bingo';
+import NewBingoModal from './NewBingoModal';
 import RandomBingoButton from './RandomBingoButtom';
 import RoundCounter from './RoundCounter';
 
@@ -8,6 +9,10 @@ const AutoBingo = () => {
   const [round, setRound] = useState(1);
   const [ball, setBall] = useState('');
   const [bingosList, setBingosList] = useState([]);
+
+  const addNewBingo = newBingo => {
+    setBingosList([...bingosList, newBingo]);
+  };
 
   // Update the grid of every bingo when the ball value changes
   useEffect(() => {
@@ -32,7 +37,12 @@ const AutoBingo = () => {
 
   return (
     <section>
-      <BallInput setBall={setBall} />
+      <NewBingoModal handleNewBingo={addNewBingo} />
+      <BallInput
+        setValue={setBall}
+        min={1}
+        max={90}
+      />
       <RoundCounter
         round={round}
         setRound={setRound}
@@ -47,7 +57,7 @@ const AutoBingo = () => {
       ))}
       <RandomBingoButton
         bingosList={bingosList}
-        setBingosList={setBingosList}
+        handleNewBingo={addNewBingo}
       />
     </section>
   );

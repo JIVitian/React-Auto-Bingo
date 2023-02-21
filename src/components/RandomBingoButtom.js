@@ -1,8 +1,7 @@
 import { createEmptyGrid } from '../utils/grid-utils';
 import { quickSort } from '../utils/utils';
 
-
-const RandomBingoButton = ({ bingosList, setBingosList }) => {
+const RandomBingoButton = ({ handleNewBingo }) => {
   const newRandomBingo = () => {
     const randomId = Math.round(Math.random() * 9999 + 1);
     const defaultGrid = createEmptyGrid();
@@ -16,14 +15,11 @@ const RandomBingoButton = ({ bingosList, setBingosList }) => {
       else i--;
     }
 
-    setBingosList([
-      ...bingosList,
-      {
-        bingoId: randomId,
-        numbers: quickSort(Object.keys(existentNumbers).map(Number)),
-        grid: defaultGrid,
-      },
-    ]);
+    handleNewBingo({
+      bingoId: randomId,
+      numbers: quickSort(Object.keys(existentNumbers).map(Number)),
+      grid: defaultGrid,
+    });
   };
 
   return <button onClick={newRandomBingo}>Aleatorio</button>;
