@@ -10,6 +10,7 @@ const AutoBingo = () => {
   const [ball, setBall] = useState('');
   const [bingosList, setBingosList] = useState([]);
   const [bingoToUpdate, setBingoToUpdate] = useState({});
+  const [showModal, setShowModal] = useState(false);
 
   const addNewBingo = newBingo => {
     if (bingoToUpdate?.bingoId) {
@@ -34,6 +35,7 @@ const AutoBingo = () => {
 
   const handleEditBingo = bingo => {
     setBingoToUpdate(bingo);
+    setShowModal(true);
   };
 
   // Update the grid of every bingo when the ball value changes
@@ -59,10 +61,14 @@ const AutoBingo = () => {
 
   return (
     <section>
-      <NewBingoModal
-        handleSubmit={addNewBingo}
-        bingo={bingoToUpdate}
-      />
+      <button onClick={() => setShowModal(true)}>Nuevo Bingo</button>
+      {showModal && (
+        <NewBingoModal
+          handleSubmit={addNewBingo}
+          bingo={bingoToUpdate}
+          onClose={() => setShowModal(false)}
+        />
+      )}
       <BallInput
         value={ball}
         setValue={setBall}
