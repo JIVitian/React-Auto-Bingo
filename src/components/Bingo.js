@@ -1,18 +1,23 @@
+import BingoHeader from './styled/Bingo/BingoHeader';
+import BingoTable from './styled/Bingo/BingoTable';
+
 const Bingo = ({ bingoId, numbers, grid, onDelete, onEdit }) => {
   return (
-    <>
-      <div>
+    <article>
+      <BingoHeader>
         <button onClick={() => onEdit({ bingoId, numbers, grid })}>
           Editar
         </button>
         <button onClick={() => onDelete(bingoId)}>Borrar</button>
-      </div>
-      <table id={bingoId}>
+      </BingoHeader>
+      <BingoTable id={bingoId}>
         <caption>N° {bingoId}</caption>
         <thead>
           <tr>
             {numbers.map((number, index) => (
-              <th key={index}>{number}</th>
+              <th key={`${bingoId}-${index}`}>
+                {number.toString().padStart(2, '0')}
+              </th>
             ))}
           </tr>
         </thead>
@@ -20,13 +25,13 @@ const Bingo = ({ bingoId, numbers, grid, onDelete, onEdit }) => {
           {grid.map((row, rowId) => (
             <tr key={rowId}>
               {row.map((cell, cellId) => (
-                <td key={cellId}>{cell ? 'X' : ''}</td>
+                <td key={cellId}>{cell ? 'X' : '\u00A0'}</td>
               ))}
             </tr>
           ))}
         </tbody>
-      </table>
-    </>
+      </BingoTable>
+    </article>
   );
 };
 

@@ -1,9 +1,13 @@
 import { useEffect, useState } from 'react';
+import { ThemeProvider } from 'styled-components';
 import BallInput from './BallInput';
 import Bingo from './Bingo';
 import NewBingoModal from './NewBingoModal';
 import RandomBingoButton from './RandomBingoButtom';
 import RoundCounter from './RoundCounter';
+import Grid from './styled/Grid';
+import Main from './styled/Main';
+import theme from './styled/Theme';
 
 const AutoBingo = () => {
   const [round, setRound] = useState(1);
@@ -60,42 +64,47 @@ const AutoBingo = () => {
   }, [ball]);
 
   return (
-    <section>
-      <button onClick={() => setShowModal(true)}>Nuevo Bingo</button>
-      {showModal && (
-        <NewBingoModal
-          handleSubmit={addNewBingo}
-          bingo={bingoToUpdate}
-          onClose={() => setShowModal(false)}
+    <ThemeProvider theme={theme}>
+      <Main>
+        <h1>Auto Bingo</h1>
+        <button onClick={() => setShowModal(true)}>Nuevo Bingo</button>
+        {showModal && (
+          <NewBingoModal
+            handleSubmit={addNewBingo}
+            bingo={bingoToUpdate}
+            onClose={() => setShowModal(false)}
+          />
+        )}
+        <BallInput
+          value={ball}
+          setValue={setBall}
+          min={1}
+          max={90}
         />
-      )}
-      <BallInput
-        value={ball}
-        setValue={setBall}
-        min={1}
-        max={90}
-      />
-      <RoundCounter
-        round={round}
-        setRound={setRound}
-      />
-      <RandomBingoButton
-        bingosList={bingosList}
-        handleNewBingo={addNewBingo}
-      />
-      {bingosList.map(({ bingoId, numbers, grid }) => (
-        <Bingo
-          key={bingoId}
-          bingoId={bingoId}
-          numbers={numbers}
-          grid={grid}
-          onDelete={() =>
-            setBingosList(bingosList.filter(b => b.bingoId !== bingoId))
-          }
-          onEdit={handleEditBingo}
+        <RoundCounter
+          round={round}
+          setRound={setRound}
         />
-      ))}
-    </section>
+        <RandomBingoButton
+          bingosList={bingosList}
+          handleNewBingo={addNewBingo}
+        />
+        <Grid>
+          {bingosList.map(({ bingoId, numbers, grid }) => (
+            <Bingo
+              key={bingoId}
+              bingoId={bingoId}
+              numbers={numbers}
+              grid={grid}
+              onDelete={() =>
+                setBingosList(bingosList.filter(b => b.bingoId !== bingoId))
+              }
+              onEdit={handleEditBingo}
+            />
+          ))}
+        </Grid>
+      </Main>
+    </ThemeProvider>
   );
 };
 
