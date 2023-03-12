@@ -9,7 +9,6 @@ const BingoTable = styled.table`
     caption {
         font-size: 1.2rem;
         padding: .2rem 0;
-        /* font-weight: bold; */
         background-color: #212529;
         color: #ffffff;
     }
