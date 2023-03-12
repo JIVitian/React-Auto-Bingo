@@ -1,38 +1,33 @@
+import { useState } from 'react';
+import { MIN_COLUMN_VALUE, MAX_COLUMN_VALUE } from './constants/bingo-props';
+
 const BallInput = ({
-  value,
-  setValue,
-  min = 1,
-  max = 90,
+  initialValue = '',
+  callback,
+  min = MIN_COLUMN_VALUE,
+  max = MAX_COLUMN_VALUE,
   saveOnEnter = true,
-  name
+  name,
 }) => {
-  const isNumber = value => /\d/.test(value);
+  const [value, setValue] = useState(initialValue);
+
+  const isNumber = val => /\d/.test(val);
 
   const handleKeyDown = event => {
     const key = event.key;
     const newValue = event.target.value;
 
     if (key === 'Backspace') return;
-
-    if (key === 'Enter' && saveOnEnter) {
-      setValue(newValue);
-      
-      // Reset the input
-      event.target.value = '';
+    if (saveOnEnter && key === 'Enter') {
+      callback(newValue);
+      setValue('');
     }
-
-    if (
-      !isNumber(key) ||
-      newValue + key < min ||
-      newValue + key > max
-    ) {
-      // The new digit is ignored
+    if (!isNumber(key) || newValue + key < min || newValue + key > max)
       event.preventDefault();
-    }
   };
 
   const handleChange = event => {
-    if (saveOnEnter) return;
+    if (!saveOnEnter) callback(event.target.value);
     setValue(event.target.value);
   };
 

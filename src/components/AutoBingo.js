@@ -72,15 +72,10 @@ const AutoBingo = () => {
           <NewBingoModal
             handleSubmit={addNewBingo}
             bingo={bingoToUpdate}
-            onClose={() => setShowModal(false)}
+            handleClose={() => setShowModal(false)}
           />
         )}
-        <BallInput
-          value={ball}
-          setValue={setBall}
-          min={1}
-          max={90}
-        />
+        <BallInput callback={setBall} />
         <RoundCounter
           round={round}
           setRound={setRound}
