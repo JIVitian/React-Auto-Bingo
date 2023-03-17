@@ -2,8 +2,23 @@ import BingoHeader from './styled/Bingo/BingoHeader';
 import BingoTable from './styled/Bingo/BingoTable';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faPen } from '@fortawesome/free-solid-svg-icons';
+import { Bingo as BingoModel } from '../types/Bingo';
 
-const Bingo = ({ bingoId, numbers, grid, onDelete, onEdit }) => {
+interface Props {
+  bingoId: number;
+  numbers: BingoModel['numbers'];
+  grid: BingoModel['grid'];
+  onDelete: (bingoId: number) => void;
+  onEdit: (bingo: BingoModel) => void;
+}
+
+const Bingo: React.FC<Props> = ({
+  bingoId,
+  numbers,
+  grid,
+  onDelete,
+  onEdit,
+}) => {
   return (
     <article>
       <BingoHeader>
@@ -14,7 +29,7 @@ const Bingo = ({ bingoId, numbers, grid, onDelete, onEdit }) => {
           <FontAwesomeIcon icon={faTrash} />
         </button>
       </BingoHeader>
-      <BingoTable id={bingoId}>
+      <BingoTable id={String(bingoId)}>
         <caption>N° {bingoId}</caption>
         <thead>
           <tr>

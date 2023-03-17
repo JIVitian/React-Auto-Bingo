@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { ThemeProvider } from 'styled-components';
 import BallInput from './BallInput';
 import Bingo from './Bingo';
 import NewBingoModal from './NewBingoModal';
@@ -7,16 +6,16 @@ import RandomBingoButton from './RandomBingoButtom';
 import RoundCounter from './RoundCounter';
 import Grid from './styled/Grid';
 import Main from './styled/Main';
-import theme from './styled/Theme';
+import { Bingo as BingoModel } from '../types/Bingo';
 
 const AutoBingo = () => {
   const [round, setRound] = useState(1);
-  const [ball, setBall] = useState('');
-  const [bingosList, setBingosList] = useState([]);
-  const [bingoToUpdate, setBingoToUpdate] = useState({});
+  const [ball, setBall] = useState<number>();
+  const [bingosList, setBingosList] = useState<BingoModel[]>([]);
+  const [bingoToUpdate, setBingoToUpdate] = useState<Partial<BingoModel>>({});
   const [showModal, setShowModal] = useState(false);
 
-  const addNewBingo = newBingo => {
+  const addNewBingo = (newBingo: BingoModel) => {
     if (bingoToUpdate?.bingoId) {
       setBingosList(
         bingosList.map(bingo =>
@@ -37,7 +36,7 @@ const AutoBingo = () => {
     setBingosList([...bingosList, newBingo]);
   };
 
-  const handleEditBingo = bingo => {
+  const handleEditBingo = (bingo: BingoModel) => {
     setBingoToUpdate(bingo);
     setShowModal(true);
   };
@@ -64,42 +63,37 @@ const AutoBingo = () => {
   }, [ball]);
 
   return (
-    <ThemeProvider theme={theme}>
-      <Main>
-        <h1>Auto Bingo</h1>
-        <button onClick={() => setShowModal(true)}>Nuevo Bingo</button>
-        {showModal && (
-          <NewBingoModal
-            handleSubmit={addNewBingo}
-            bingo={bingoToUpdate}
-            handleClose={() => setShowModal(false)}
+    <Main>
+      <h1>Auto Bingo</h1>
+      <button onClick={() => setShowModal(true)}>Nuevo Bingo</button>
+      {showModal && (
+        <NewBingoModal
+          handleSubmit={addNewBingo}
+          bingo={bingoToUpdate as BingoModel}
+          handleClose={() => setShowModal(false)}
+        />
+      )}
+      <BallInput callback={setBall} />
+      <RoundCounter
+        round={round}
+        setRound={setRound}
+      />
+      <RandomBingoButton handleNewBingo={addNewBingo} />
+      <Grid>
+        {bingosList.map(({ bingoId, numbers, grid }) => (
+          <Bingo
+            key={bingoId}
+            bingoId={bingoId}
+            numbers={numbers}
+            grid={grid}
+            onDelete={() =>
+              setBingosList(bingosList.filter(b => b.bingoId !== bingoId))
+            }
+            onEdit={handleEditBingo}
           />
-        )}
-        <BallInput callback={setBall} />
-        <RoundCounter
-          round={round}
-          setRound={setRound}
-        />
-        <RandomBingoButton
-          bingosList={bingosList}
-          handleNewBingo={addNewBingo}
-        />
-        <Grid>
-          {bingosList.map(({ bingoId, numbers, grid }) => (
-            <Bingo
-              key={bingoId}
-              bingoId={bingoId}
-              numbers={numbers}
-              grid={grid}
-              onDelete={() =>
-                setBingosList(bingosList.filter(b => b.bingoId !== bingoId))
-              }
-              onEdit={handleEditBingo}
-            />
-          ))}
-        </Grid>
-      </Main>
-    </ThemeProvider>
+        ))}
+      </Grid>
+    </Main>
   );
 };
 

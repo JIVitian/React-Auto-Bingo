@@ -1,11 +1,15 @@
+import { Bingo } from '../types/Bingo';
 import { createEmptyGrid } from '../utils/grid-utils';
-import { quickSort } from '../utils/utils';
 
-const RandomBingoButton = ({ handleNewBingo }) => {
+interface Props {
+  handleNewBingo: (bingo: Bingo) => void;
+}
+
+const RandomBingoButton: React.FC<Props> = ({ handleNewBingo }) => {
   const newRandomBingo = () => {
     const randomId = Math.round(Math.random() * 9999 + 1);
     const defaultGrid = createEmptyGrid();
-    const existentNumbers = {};
+    const existentNumbers = {} as { [key: number]: boolean };
 
     // Create 10 distincts random numbers
     for (let i = 0; i < 10; i++) {
@@ -17,7 +21,7 @@ const RandomBingoButton = ({ handleNewBingo }) => {
 
     handleNewBingo({
       bingoId: randomId,
-      numbers: quickSort(Object.keys(existentNumbers).map(Number)),
+      numbers: Object.keys(existentNumbers).map(Number).sort(),
       grid: defaultGrid,
     });
   };
