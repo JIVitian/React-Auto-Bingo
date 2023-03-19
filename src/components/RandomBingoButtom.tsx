@@ -8,24 +8,15 @@ interface Props {
 
 const RandomBingoButton: FC<Props> = ({ newBingoCallback }) => {
   const newRandomBingo = () => {
-    const randomId = Math.round(Math.random() * 9999 + 1);
-    const defaultGrid = createEmptyGrid();
-    const existentNumbers = {} as { [key: number]: boolean };
+    const existentNumbers = new Set<number>();
 
-    // Create 10 distincts random numbers
-    for (let i = 0; i < 10; i++) {
-      let rand = Math.round(Math.random() * 89 + 1);
-
-      if (!existentNumbers[rand]) existentNumbers[rand] = true;
-      else i--;
-    }
+    while (existentNumbers.size < 10)
+      existentNumbers.add(Math.round(Math.random() * 89 + 1));
 
     newBingoCallback({
-      bingoId: randomId,
-      numbers: Object.keys(existentNumbers)
-        .map(Number)
-        .sort((a, b) => a - b),
-      grid: defaultGrid,
+      bingoId: Math.round(Math.random() * 9999 + 1),
+      numbers: Array.from(existentNumbers).sort((a, b) => a - b),
+      grid: createEmptyGrid(),
     });
   };
 
