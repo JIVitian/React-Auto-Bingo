@@ -7,13 +7,13 @@ import BallInput from './BallInput';
 interface Props {
   handleSubmit: (bingo: Bingo) => void;
   bingo: Bingo;
-  handleClose: () => void;
+  onCloseCallback: () => void;
 }
 
 const NewBingoModal: React.FC<Props> = ({
   handleSubmit,
   bingo,
-  handleClose,
+  onCloseCallback,
 }) => {
   const [numbers, setNumbers] = useState(
     createEmptyRow<number | string>(10, '')
@@ -43,7 +43,12 @@ const NewBingoModal: React.FC<Props> = ({
       bingoId,
       grid: bingo.grid || createEmptyGrid(),
     });
-    handleClose();
+    onCloseCallback();
+  };
+
+  const handleClose = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    onCloseCallback();
   };
 
   useEffect(() => {

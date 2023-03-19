@@ -16,8 +16,8 @@ const AutoBingo = () => {
 
   const addNewBingo = (newBingo: BingoModel) => {
     if (bingoToUpdate?.bingoId) {
-      setBingosList(
-        bingosList.map(bingo =>
+      setBingosList(list =>
+        list.map(bingo =>
           bingo.bingoId === bingoToUpdate.bingoId ? newBingo : bingo
         )
       );
@@ -47,7 +47,7 @@ const AutoBingo = () => {
   );
 
   // Update the grid of every bingo when the ball value changes
-  const handleBallChange = useCallback((newBall: BingoNumber) => {
+  const handleBallChange = useCallback((newBall: BingoNumber, currentRound: number) => {
     if (!newBall) return;
 
     setBingosList(list =>
@@ -55,14 +55,14 @@ const AutoBingo = () => {
         .map(({ bingoId, numbers, grid }) => {
           const col = numbers.indexOf(+newBall);
 
-          if (col !== -1) grid[round - 1][col] = true;
+          if (col !== -1) grid[currentRound - 1][col] = true;
 
           return { bingoId, numbers, grid };
         })
         .sort(
           (a, b) =>
-            b.grid[round - 1].filter(cell => cell).length -
-            a.grid[round - 1].filter(cell => cell).length
+            b.grid[currentRound - 1].filter(cell => cell).length -
+            a.grid[currentRound - 1].filter(cell => cell).length
         )
     );
   }, []);
@@ -70,15 +70,15 @@ const AutoBingo = () => {
   return (
     <Main>
       <h1>Auto Bingo</h1>
-      <button onClick={() => setShowModal(true)}>Nuevo Bingo</button>
+      <button onClick={() => setShowModal(!showModal)}>Nuevo Bingo</button>
       {showModal && (
         <NewBingoModal
           handleSubmit={addNewBingo}
           bingo={bingoToUpdate as BingoModel}
-          handleClose={() => setShowModal(false)}
+          onCloseCallback={() => setShowModal(false)}
         />
       )}
-      <BallInput callback={handleBallChange} />
+      <BallInput callback={(val) => handleBallChange(val, round)} />
       <RoundCounter
         round={round}
         setRound={setRound}
