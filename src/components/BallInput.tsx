@@ -1,4 +1,4 @@
-import { ChangeEvent, KeyboardEvent, useState } from 'react';
+import { ChangeEvent, KeyboardEvent, useState, FC, useEffect } from 'react';
 import { BingoNumber } from '../types/Bingo';
 import { MIN_COLUMN_VALUE, MAX_COLUMN_VALUE } from './constants/bingo-props';
 
@@ -11,7 +11,7 @@ interface Props {
   name?: string;
 }
 
-const BallInput: React.FC<Props> = ({
+const BallInput: FC<Props> = ({
   initialValue = '',
   callback,
   min = MIN_COLUMN_VALUE,
@@ -45,6 +45,8 @@ const BallInput: React.FC<Props> = ({
     if (!saveOnEnter) callback(event.target.value);
     setValue(event.target.value);
   };
+
+  useEffect(() => setValue(initialValue), [initialValue]);
 
   return (
     <input

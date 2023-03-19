@@ -1,5 +1,11 @@
-import React from 'react';
-import { useEffect, useState } from 'react';
+import {
+  useEffect,
+  useState,
+  MouseEvent,
+  FormEvent,
+  FC,
+  useCallback,
+} from 'react';
 import { Bingo, BingoNumber } from '../types/Bingo';
 import { createEmptyGrid, createEmptyRow } from '../utils/grid-utils';
 import BallInput from './BallInput';
@@ -10,23 +16,17 @@ interface Props {
   onCloseCallback: () => void;
 }
 
-const NewBingoModal: React.FC<Props> = ({
-  handleSubmit,
-  bingo,
-  onCloseCallback,
-}) => {
-  const [numbers, setNumbers] = useState(
-    createEmptyRow<number | string>(10, '')
-  );
+const NewBingoModal: FC<Props> = ({ handleSubmit, bingo, onCloseCallback }) => {
+  const [numbers, setNumbers] = useState(createEmptyRow<BingoNumber>(10, ''));
   const [bingoId, setBingoId] = useState(0);
 
-  const saveColumnNumber = (value: BingoNumber, index: number) => {
-    const newNumbers = [...numbers];
-    newNumbers[index] = value;
-    setNumbers(newNumbers);
-  };
+  const saveColumnNumber = useCallback((value: BingoNumber, index: number) => {
+    setNumbers(list => (list as any).with(index, +value));
+  }, []);
 
-  const createBingo = (e: React.FormEvent<HTMLFormElement>) => {
+  const saveBingoId = useCallback((v: number) => setBingoId(v), []);
+
+  const createBingo = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!bingoId || numbers.some(x => !x)) {
       alert('Complete todos los campos');
@@ -39,14 +39,15 @@ const NewBingoModal: React.FC<Props> = ({
     }
 
     handleSubmit({
-      numbers: numbers.map(Number).sort((a, b) => a - b),
       bingoId,
+      numbers: numbers.map(Number).sort((a, b) => a - b),
       grid: bingo.grid || createEmptyGrid(),
     });
+
     onCloseCallback();
   };
 
-  const handleClose = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClose = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     onCloseCallback();
   };
@@ -62,7 +63,8 @@ const NewBingoModal: React.FC<Props> = ({
       <div>
         <h4>N°</h4>
         <BallInput
-          callback={(v: number) => setBingoId(v)}
+          callback={saveBingoId}
+          initialValue={bingoId || ''}
           max={Number.MAX_SAFE_INTEGER}
           saveOnEnter={false}
           name="bingoId"

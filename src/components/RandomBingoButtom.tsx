@@ -1,11 +1,12 @@
+import { FC, memo } from 'react';
 import { Bingo } from '../types/Bingo';
 import { createEmptyGrid } from '../utils/grid-utils';
 
 interface Props {
-  handleNewBingo: (bingo: Bingo) => void;
+  newBingoCallback: (bingo: Bingo) => void;
 }
 
-const RandomBingoButton: React.FC<Props> = ({ handleNewBingo }) => {
+const RandomBingoButton: FC<Props> = ({ newBingoCallback }) => {
   const newRandomBingo = () => {
     const randomId = Math.round(Math.random() * 9999 + 1);
     const defaultGrid = createEmptyGrid();
@@ -19,9 +20,11 @@ const RandomBingoButton: React.FC<Props> = ({ handleNewBingo }) => {
       else i--;
     }
 
-    handleNewBingo({
+    newBingoCallback({
       bingoId: randomId,
-      numbers: Object.keys(existentNumbers).map(Number).sort((a,b) => a - b),
+      numbers: Object.keys(existentNumbers)
+        .map(Number)
+        .sort((a, b) => a - b),
       grid: defaultGrid,
     });
   };
@@ -29,4 +32,4 @@ const RandomBingoButton: React.FC<Props> = ({ handleNewBingo }) => {
   return <button onClick={newRandomBingo}>Aleatorio</button>;
 };
 
-export default RandomBingoButton;
+export default memo(RandomBingoButton);

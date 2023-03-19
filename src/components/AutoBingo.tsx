@@ -14,58 +14,62 @@ const AutoBingo = () => {
   const [bingoToUpdate, setBingoToUpdate] = useState<Partial<BingoModel>>({});
   const [showModal, setShowModal] = useState(false);
 
+  const updateBingo = (newBingo: BingoModel) => {
+    setBingosList(list =>
+      list.map(bingo =>
+        bingo.bingoId === bingoToUpdate.bingoId ? newBingo : bingo
+      )
+    );
+
+    setBingoToUpdate({});
+  };
+
   const addNewBingo = (newBingo: BingoModel) => {
-    if (bingoToUpdate?.bingoId) {
-      setBingosList(list =>
-        list.map(bingo =>
-          bingo.bingoId === bingoToUpdate.bingoId ? newBingo : bingo
-        )
-      );
-
-      setBingoToUpdate({});
-
-      return;
-    }
-
     if (bingosList.some(bingo => bingo.bingoId === newBingo.bingoId)) {
       alert('Ya existe un bingo con ese número');
       return;
     }
 
-    setBingosList([...bingosList, newBingo]);
+    setBingosList(list => [...list, newBingo]);
   };
 
-  const handleEditBingo = useCallback((bingo: BingoModel) => {
-    setBingoToUpdate(bingo);
+  const handleNewBingo = (newBingo: BingoModel) => {
+    if (bingoToUpdate?.bingoId) updateBingo(newBingo);
+    else addNewBingo(newBingo);
+  };
+
+  const onBingoEdit = useCallback((bingo: BingoModel) => {
     setShowModal(true);
+    setBingoToUpdate(bingo);
   }, []);
 
-  const handleBingoDelete = useCallback(
-    (bingoId: BingoNumber) =>
-      setBingosList(bingosList.filter(b => b.bingoId !== bingoId)),
-    [bingosList]
-  );
+  const handleBingoDelete = useCallback((bingoId: BingoNumber) => {
+    setBingosList(list => list.filter(b => b.bingoId !== bingoId));
+  }, []);
 
   // Update the grid of every bingo when the ball value changes
-  const handleBallChange = useCallback((newBall: BingoNumber, currentRound: number) => {
-    if (!newBall) return;
+  const handleBallChange = useCallback(
+    (newBall: BingoNumber, currentRound: number) => {
+      if (!newBall || !currentRound) return;
 
-    setBingosList(list =>
-      list
-        .map(({ bingoId, numbers, grid }) => {
-          const col = numbers.indexOf(+newBall);
+      setBingosList(list =>
+        list
+          .map(({ bingoId, numbers, grid }) => {
+            const col = numbers.indexOf(+newBall);
 
-          if (col !== -1) grid[currentRound - 1][col] = true;
+            if (col !== -1) grid[currentRound - 1][col] = true;
 
-          return { bingoId, numbers, grid };
-        })
-        .sort(
-          (a, b) =>
-            b.grid[currentRound - 1].filter(cell => cell).length -
-            a.grid[currentRound - 1].filter(cell => cell).length
-        )
-    );
-  }, []);
+            return { bingoId, numbers, grid };
+          })
+          .sort(
+            (a, b) =>
+              b.grid[currentRound - 1].filter(cell => cell).length -
+              a.grid[currentRound - 1].filter(cell => cell).length
+          )
+      );
+    },
+    []
+  );
 
   return (
     <Main>
@@ -73,17 +77,17 @@ const AutoBingo = () => {
       <button onClick={() => setShowModal(!showModal)}>Nuevo Bingo</button>
       {showModal && (
         <NewBingoModal
-          handleSubmit={addNewBingo}
+          handleSubmit={handleNewBingo}
           bingo={bingoToUpdate as BingoModel}
           onCloseCallback={() => setShowModal(false)}
         />
       )}
-      <BallInput callback={(val) => handleBallChange(val, round)} />
+      <BallInput callback={val => handleBallChange(val, round)} />
       <RoundCounter
         round={round}
         setRound={setRound}
       />
-      <RandomBingoButton handleNewBingo={addNewBingo} />
+      <RandomBingoButton newBingoCallback={addNewBingo} />
       <Grid>
         {bingosList.map(({ bingoId, numbers, grid }) => (
           <Bingo
@@ -92,7 +96,7 @@ const AutoBingo = () => {
             numbers={numbers}
             grid={grid}
             onDelete={handleBingoDelete}
-            onEdit={handleEditBingo}
+            onEdit={onBingoEdit}
           />
         ))}
       </Grid>
