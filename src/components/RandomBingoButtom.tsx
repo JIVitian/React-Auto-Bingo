@@ -21,7 +21,7 @@ const RandomBingoButton: React.FC<Props> = ({ handleNewBingo }) => {
 
     handleNewBingo({
       bingoId: randomId,
-      numbers: Object.keys(existentNumbers).map(Number).sort(),
+      numbers: Object.keys(existentNumbers).map(Number).sort((a,b) => a - b),
       grid: defaultGrid,
     });
   };

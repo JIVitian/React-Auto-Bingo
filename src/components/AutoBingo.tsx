@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import BallInput from './BallInput';
 import Bingo from './Bingo';
 import NewBingoModal from './NewBingoModal';
@@ -6,11 +6,10 @@ import RandomBingoButton from './RandomBingoButtom';
 import RoundCounter from './RoundCounter';
 import Grid from './styled/Grid';
 import Main from './styled/Main';
-import { Bingo as BingoModel } from '../types/Bingo';
+import { Bingo as BingoModel, BingoNumber } from '../types/Bingo';
 
 const AutoBingo = () => {
   const [round, setRound] = useState(1);
-  const [ball, setBall] = useState<number>();
   const [bingosList, setBingosList] = useState<BingoModel[]>([]);
   const [bingoToUpdate, setBingoToUpdate] = useState<Partial<BingoModel>>({});
   const [showModal, setShowModal] = useState(false);
@@ -36,19 +35,25 @@ const AutoBingo = () => {
     setBingosList([...bingosList, newBingo]);
   };
 
-  const handleEditBingo = (bingo: BingoModel) => {
+  const handleEditBingo = useCallback((bingo: BingoModel) => {
     setBingoToUpdate(bingo);
     setShowModal(true);
-  };
+  }, []);
+
+  const handleBingoDelete = useCallback(
+    (bingoId: BingoNumber) =>
+      setBingosList(bingosList.filter(b => b.bingoId !== bingoId)),
+    [bingosList]
+  );
 
   // Update the grid of every bingo when the ball value changes
-  useEffect(() => {
-    if (!ball) return;
+  const handleBallChange = useCallback((newBall: BingoNumber) => {
+    if (!newBall) return;
 
-    setBingosList(
-      bingosList
+    setBingosList(list =>
+      list
         .map(({ bingoId, numbers, grid }) => {
-          const col = numbers.indexOf(+ball);
+          const col = numbers.indexOf(+newBall);
 
           if (col !== -1) grid[round - 1][col] = true;
 
@@ -60,7 +65,7 @@ const AutoBingo = () => {
             a.grid[round - 1].filter(cell => cell).length
         )
     );
-  }, [ball]);
+  }, []);
 
   return (
     <Main>
@@ -73,7 +78,7 @@ const AutoBingo = () => {
           handleClose={() => setShowModal(false)}
         />
       )}
-      <BallInput callback={setBall} />
+      <BallInput callback={handleBallChange} />
       <RoundCounter
         round={round}
         setRound={setRound}
@@ -86,9 +91,7 @@ const AutoBingo = () => {
             bingoId={bingoId}
             numbers={numbers}
             grid={grid}
-            onDelete={() =>
-              setBingosList(bingosList.filter(b => b.bingoId !== bingoId))
-            }
+            onDelete={handleBingoDelete}
             onEdit={handleEditBingo}
           />
         ))}
