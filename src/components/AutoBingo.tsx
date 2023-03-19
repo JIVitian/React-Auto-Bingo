@@ -47,6 +47,16 @@ const AutoBingo = () => {
     setBingosList(list => list.filter(b => b.bingoId !== bingoId));
   }, []);
 
+  const toggleModal = () => {
+    setShowModal(show => !show);
+    setBingoToUpdate({});
+  };
+
+  const closeModal = useCallback(() => {
+    setShowModal(false);
+    setBingoToUpdate({});
+  }, []);
+
   // Update the grid of every bingo when the ball value changes
   const handleBallChange = useCallback(
     (newBall: BingoNumber, currentRound: number) => {
@@ -74,12 +84,12 @@ const AutoBingo = () => {
   return (
     <Main>
       <h1>Auto Bingo</h1>
-      <button onClick={() => setShowModal(!showModal)}>Nuevo Bingo</button>
+      <button onClick={toggleModal}>Nuevo Bingo</button>
       {showModal && (
         <NewBingoModal
           handleSubmit={handleNewBingo}
           bingo={bingoToUpdate as BingoModel}
-          onCloseCallback={() => setShowModal(false)}
+          onCloseCallback={closeModal}
         />
       )}
       <BallInput callback={val => handleBallChange(val, round)} />

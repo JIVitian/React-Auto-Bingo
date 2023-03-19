@@ -5,6 +5,7 @@ import {
   FormEvent,
   FC,
   useCallback,
+  memo,
 } from 'react';
 import { Bingo, BingoNumber } from '../types/Bingo';
 import { createEmptyGrid, createEmptyRow } from '../utils/grid-utils';
@@ -87,4 +88,4 @@ const NewBingoModal: FC<Props> = ({ handleSubmit, bingo, onCloseCallback }) => {
   );
 };
 
-export default NewBingoModal;
+export default memo(NewBingoModal);
