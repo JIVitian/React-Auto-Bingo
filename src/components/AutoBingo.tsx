@@ -7,6 +7,7 @@ import RoundCounter from './RoundCounter';
 import Grid from './styled/Grid';
 import Main from './styled/Main';
 import { Bingo as BingoModel, BingoNumber } from '../types/Bingo';
+import Navbar from './styled/Navbar';
 
 const AutoBingo = () => {
   const [round, setRound] = useState(1);
@@ -82,35 +83,45 @@ const AutoBingo = () => {
   );
 
   return (
-    <Main>
-      <h1>Auto Bingo</h1>
-      <button onClick={toggleModal}>Nuevo Bingo</button>
-      {showModal && (
-        <NewBingoModal
-          handleSubmit={handleNewBingo}
-          bingo={bingoToUpdate as BingoModel}
-          onCloseCallback={closeModal}
-        />
-      )}
-      <BallInput callback={val => handleBallChange(val, round)} />
-      <RoundCounter
-        round={round}
-        setRound={setRound}
-      />
-      <RandomBingoButton newBingoCallback={addNewBingo} />
-      <Grid>
-        {bingosList.map(({ bingoId, numbers, grid }) => (
-          <Bingo
-            key={bingoId}
-            bingoId={bingoId}
-            numbers={numbers}
-            grid={grid}
-            onDelete={handleBingoDelete}
-            onEdit={onBingoEdit}
+    <>
+      <Navbar>
+        <h3>AutoBingo</h3>
+        <section className='navbar-inputs'>
+          <BallInput callback={val => handleBallChange(val, round)} />
+          <div>
+            <RoundCounter
+              round={round}
+              setRound={setRound}
+            />
+          </div>
+        </section>
+        <section className='btn-container'>
+          <button onClick={toggleModal}>Nuevo Bingo</button>
+          <RandomBingoButton newBingoCallback={addNewBingo} />
+        </section>
+      </Navbar>
+      <Main>
+        {showModal && (
+          <NewBingoModal
+            handleSubmit={handleNewBingo}
+            bingo={bingoToUpdate as BingoModel}
+            onCloseCallback={closeModal}
           />
-        ))}
-      </Grid>
-    </Main>
+        )}
+        <Grid>
+          {bingosList.map(({ bingoId, numbers, grid }) => (
+            <Bingo
+              key={bingoId}
+              bingoId={bingoId}
+              numbers={numbers}
+              grid={grid}
+              onDelete={handleBingoDelete}
+              onEdit={onBingoEdit}
+            />
+          ))}
+        </Grid>
+      </Main>
+    </>
   );
 };
 

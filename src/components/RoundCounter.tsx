@@ -1,9 +1,12 @@
+import { FC, memo } from 'react';
+import RoundContainer from './styled/Bingo/RoundContainer';
+
 interface Props {
   round: number;
   setRound: (round: number) => void;
 }
 
-const RoundCounter: React.FC<Props> = ({ round, setRound }) => {
+const RoundCounter: FC<Props> = ({ round, setRound }) => {
   const decreaseRound = () => {
     if (round > 1) setRound(round - 1);
   };
@@ -13,7 +16,7 @@ const RoundCounter: React.FC<Props> = ({ round, setRound }) => {
   };
 
   return (
-    <div className="round-container">
+    <RoundContainer>
       <button
         className="ronda-btn"
         onClick={decreaseRound}
@@ -34,8 +37,8 @@ const RoundCounter: React.FC<Props> = ({ round, setRound }) => {
       >
         +
       </button>
-    </div>
+    </RoundContainer>
   );
 };
 
-export default RoundCounter;
+export default memo(RoundCounter);
