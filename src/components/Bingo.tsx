@@ -1,4 +1,3 @@
-import { memo } from 'react';
 import BingoHeader from './styled/Bingo/BingoHeader';
 import BingoTable from './styled/Bingo/BingoTable';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -6,7 +5,7 @@ import { faTrash, faPen } from '@fortawesome/free-solid-svg-icons';
 import { Bingo as BingoModel } from '../types/Bingo';
 
 interface Props {
-  bingoId: BingoModel["bingoId"];
+  bingoId: BingoModel['bingoId'];
   numbers: BingoModel['numbers'];
   grid: BingoModel['grid'];
   onDelete: (bingoId: number) => void;
@@ -55,4 +54,4 @@ const Bingo: React.FC<Props> = ({
   );
 };
 
-export default memo(Bingo);
+export default Bingo;

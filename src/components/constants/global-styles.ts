@@ -6,11 +6,10 @@ const styles = {
   secondaryColor: '#6c757d',
   secondaryColorDark: '#545b62',
   table: {
-    background: '#f5f5f5',
+    backgroundColor: '#212529',
     color: '#000000',
 
     textColor: '#000000',
-    backgroundColor: '#ffffff',
   },
 };
 

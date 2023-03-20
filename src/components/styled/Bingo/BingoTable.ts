@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import styles from '../../constants/global-styles';
 
 const BingoTable = styled.table`
   border-collapse: collapse;
@@ -9,8 +10,8 @@ const BingoTable = styled.table`
   caption {
     font-size: 1.2rem;
     padding: 0.2rem 0;
-    background-color: #212529;
-    color: #ffffff;
+    background-color: ${styles.backgroundColor};
+    color: ${styles.textColor};
   }
   thead {
     tr {
