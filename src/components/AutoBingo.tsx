@@ -87,7 +87,10 @@ const AutoBingo = () => {
       <Navbar>
         <h3>AutoBingo</h3>
         <section className='navbar-inputs'>
-          <BallInput callback={val => handleBallChange(val, round)} />
+          <BallInput
+            callback={val => handleBallChange(val, round)}
+            placeholder='Jugada'
+          />
           <div>
             <RoundCounter
               round={round}

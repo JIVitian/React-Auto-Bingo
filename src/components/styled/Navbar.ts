@@ -43,6 +43,16 @@ const Navbar = styled.nav`
         background-color: ${styles.primaryColorDark};
         transition: all 0.2s ease-in-out;
       }
+
+      &:focus {
+        outline: none;
+        &:active {
+          outline: none;
+          &::selection {
+            background: none;
+          }
+        }
+      }
     }
   }
 `;

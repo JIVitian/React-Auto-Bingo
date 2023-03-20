@@ -1,6 +1,7 @@
 import { ChangeEvent, KeyboardEvent, useState, FC, useEffect } from 'react';
 import { BingoNumber } from '../types/Bingo';
 import { MIN_COLUMN_VALUE, MAX_COLUMN_VALUE } from './constants/bingo-props';
+import StyledBallInput from './styled/StyledBallInput';
 
 interface Props {
   initialValue?: BingoNumber;
@@ -9,6 +10,7 @@ interface Props {
   max?: number;
   saveOnEnter?: boolean;
   name?: string;
+  placeholder?: string;
 }
 
 const BallInput: FC<Props> = ({
@@ -18,6 +20,7 @@ const BallInput: FC<Props> = ({
   max = MAX_COLUMN_VALUE,
   saveOnEnter = true,
   name,
+  placeholder,
 }) => {
   const [value, setValue] = useState(initialValue);
 
@@ -49,7 +52,7 @@ const BallInput: FC<Props> = ({
   useEffect(() => setValue(initialValue), [initialValue]);
 
   return (
-    <input
+    <StyledBallInput
       type="number"
       value={value}
       min={min}
@@ -57,6 +60,7 @@ const BallInput: FC<Props> = ({
       onKeyDown={handleKeyDown}
       onChange={handleChange}
       name={name}
+      placeholder={placeholder}
     />
   );
 };

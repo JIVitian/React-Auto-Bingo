@@ -1,5 +1,6 @@
 import { FC, memo } from 'react';
 import RoundContainer from './styled/Bingo/RoundContainer';
+import StyledBallInput from './styled/StyledBallInput';
 
 interface Props {
   round: number;
@@ -23,7 +24,7 @@ const RoundCounter: FC<Props> = ({ round, setRound }) => {
       >
         -
       </button>
-      <input
+      <StyledBallInput
         type="number"
         min="1"
         max="10"
