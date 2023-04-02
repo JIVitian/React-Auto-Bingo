@@ -1,15 +1,11 @@
 import { createContext, useCallback, useState } from 'react';
-import BallInput from './BallInput';
 import Bingo from './Bingo';
 import NewBingoModal from './NewBingoModal';
-import RandomBingoButton from './RandomBingoButtom';
-import RoundCounter from './RoundCounter';
 import Grid from './styled/Grid';
 import Main from './styled/Main';
 import { Bingo as BingoModel, BingoNumber } from '../types/Bingo';
-import * as S from './styled/Navbar';
-import { StyledButton } from './styled/Global';
 import { RoundContextType } from '../types/ContextTypes';
+import Navbar from './Navbar';
 
 export const RoundContext = createContext({} as RoundContextType);
 
@@ -89,20 +85,11 @@ const AutoBingo = () => {
   return (
     <>
       <RoundContext.Provider value={{ round, setRound }}>
-        <S.Navbar>
-          <S.NavbarTitle>AutoBingo</S.NavbarTitle>
-          <S.NavbarInputs>
-            <BallInput
-              callback={val => handleBallChange(val, round)}
-              placeholder="Jugada"
-            />
-            <RoundCounter/>
-          </S.NavbarInputs>
-          <S.NavbarBtnContainer>
-            <StyledButton onClick={toggleModal}>Nuevo Bingo</StyledButton>
-            <RandomBingoButton newBingoCallback={addNewBingo} />
-          </S.NavbarBtnContainer>
-        </S.Navbar>
+        <Navbar
+          toggleModal={toggleModal}
+          addNewBingo={addNewBingo}
+          handleBallChange={handleBallChange}
+        />
       </RoundContext.Provider>
       <Main>
         {showModal && (

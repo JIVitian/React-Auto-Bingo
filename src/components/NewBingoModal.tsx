@@ -84,7 +84,6 @@ const NewBingoModal: FC<Props> = ({ handleSubmit, bingo, onCloseCallback }) => {
                 callback={value => saveColumnNumber(value, i)}
                 saveOnEnter={false}
                 name={`number-${i}`}
-                tabIndex={i + 1}
               />
             ))}
           </section>
