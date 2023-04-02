@@ -7,7 +7,8 @@ import RoundCounter from './RoundCounter';
 import Grid from './styled/Grid';
 import Main from './styled/Main';
 import { Bingo as BingoModel, BingoNumber } from '../types/Bingo';
-import Navbar from './styled/Navbar';
+import * as S from './styled/Navbar';
+import { StyledButton } from './styled/Global';
 
 const AutoBingo = () => {
   const [round, setRound] = useState(1);
@@ -84,25 +85,23 @@ const AutoBingo = () => {
 
   return (
     <>
-      <Navbar>
-        <h3>AutoBingo</h3>
-        <section className='navbar-inputs'>
+      <S.Navbar>
+        <S.NavbarTitle>AutoBingo</S.NavbarTitle>
+        <S.NavbarInputs>
           <BallInput
             callback={val => handleBallChange(val, round)}
-            placeholder='Jugada'
+            placeholder="Jugada"
           />
-          <div>
-            <RoundCounter
-              round={round}
-              setRound={setRound}
-            />
-          </div>
-        </section>
-        <section className='btn-container'>
-          <button onClick={toggleModal}>Nuevo Bingo</button>
+          <RoundCounter
+            round={round}
+            setRound={setRound}
+          />
+        </S.NavbarInputs>
+        <S.NavbarBtnContainer>
+          <StyledButton onClick={toggleModal}>Nuevo Bingo</StyledButton>
           <RandomBingoButton newBingoCallback={addNewBingo} />
-        </section>
-      </Navbar>
+        </S.NavbarBtnContainer>
+      </S.Navbar>
       <Main>
         {showModal && (
           <NewBingoModal

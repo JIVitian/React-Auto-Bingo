@@ -1,6 +1,7 @@
 import { FC, memo } from 'react';
 import { Bingo } from '../types/Bingo';
 import { createEmptyGrid } from '../utils/grid-utils';
+import { StyledButton } from './styled/Global';
 
 interface Props {
   newBingoCallback: (bingo: Bingo) => void;
@@ -20,7 +21,7 @@ const RandomBingoButton: FC<Props> = ({ newBingoCallback }) => {
     });
   };
 
-  return <button onClick={newRandomBingo}>Aleatorio</button>;
+  return <StyledButton onClick={newRandomBingo}>Aleatorio</StyledButton>;
 };
 
 export default memo(RandomBingoButton);
