@@ -10,6 +10,9 @@ import {
 import { Bingo, BingoNumber } from '../types/Bingo';
 import { createEmptyGrid, createEmptyRow } from '../utils/grid-utils';
 import BallInput from './BallInput';
+import * as S from './styled/NewBingoModal';
+import { StyledButton } from './styled/Global';
+import styles from './constants/global-styles';
 
 interface Props {
   handleSubmit: (bingo: Bingo) => void;
@@ -59,32 +62,38 @@ const NewBingoModal: FC<Props> = ({ handleSubmit, bingo, onCloseCallback }) => {
   }, [bingo]);
 
   return (
-    <form onSubmit={createBingo}>
-      <h3>Nuevo Bingo</h3>
-      <div>
-        <h4>N°</h4>
-        <BallInput
-          callback={saveBingoId}
-          initialValue={bingoId || ''}
-          max={Number.MAX_SAFE_INTEGER}
-          saveOnEnter={false}
-          name="bingoId"
-        />
-      </div>
-      <div>
-        {numbers.map((v, i) => (
-          <BallInput
-            key={i}
-            initialValue={v}
-            callback={value => saveColumnNumber(value, i)}
-            saveOnEnter={false}
-            name={`number-${i}`}
-          />
-        ))}
-      </div>
-      <button>Crear</button>
-      <button onClick={handleClose}>Cancelar</button>
-    </form>
+    <S.ModalBackGround>
+      <S.ModalContent onBlur={() => onCloseCallback()}>
+        <S.CloseModalButton onClick={handleClose}>&times;</S.CloseModalButton>
+        <form onSubmit={createBingo}>
+          <h2>{bingo.bingoId ? 'Editar' : 'Nuevo'} Bingo</h2>
+          <S.BingoNumberContainer>
+            <BallInput
+              callback={saveBingoId}
+              initialValue={bingoId || ''}
+              max={Number.MAX_SAFE_INTEGER}
+              saveOnEnter={false}
+              placeholder="N°"
+              name="bingoId"
+            />
+          </S.BingoNumberContainer>
+          <div>
+            {numbers.map((v, i) => (
+              <BallInput
+                key={i}
+                initialValue={v}
+                callback={value => saveColumnNumber(value, i)}
+                saveOnEnter={false}
+                name={`number-${i}`}
+              />
+            ))}
+          </div>
+          <S.ModalFooter>
+            <StyledButton>Guardar</StyledButton>
+          </S.ModalFooter>
+        </form>
+      </S.ModalContent>
+    </S.ModalBackGround>
   );
 };
 
