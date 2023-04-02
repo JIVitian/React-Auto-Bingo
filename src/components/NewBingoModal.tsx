@@ -12,7 +12,6 @@ import { createEmptyGrid, createEmptyRow } from '../utils/grid-utils';
 import BallInput from './BallInput';
 import * as S from './styled/NewBingoModal';
 import { StyledButton } from './styled/Global';
-import styles from './constants/global-styles';
 
 interface Props {
   handleSubmit: (bingo: Bingo) => void;
@@ -62,8 +61,8 @@ const NewBingoModal: FC<Props> = ({ handleSubmit, bingo, onCloseCallback }) => {
   }, [bingo]);
 
   return (
-    <S.ModalBackGround>
-      <S.ModalContent onBlur={() => onCloseCallback()}>
+    <S.ModalBackGround onClick={handleClose}>
+      <S.ModalContent onClick={e => e.stopPropagation()}>
         <S.CloseModalButton onClick={handleClose}>&times;</S.CloseModalButton>
         <form onSubmit={createBingo}>
           <h2>{bingo.bingoId ? 'Editar' : 'Nuevo'} Bingo</h2>
@@ -77,7 +76,7 @@ const NewBingoModal: FC<Props> = ({ handleSubmit, bingo, onCloseCallback }) => {
               name="bingoId"
             />
           </S.BingoNumberContainer>
-          <div>
+          <section>
             {numbers.map((v, i) => (
               <BallInput
                 key={i}
@@ -85,9 +84,10 @@ const NewBingoModal: FC<Props> = ({ handleSubmit, bingo, onCloseCallback }) => {
                 callback={value => saveColumnNumber(value, i)}
                 saveOnEnter={false}
                 name={`number-${i}`}
+                tabIndex={i + 1}
               />
             ))}
-          </div>
+          </section>
           <S.ModalFooter>
             <StyledButton>Guardar</StyledButton>
           </S.ModalFooter>

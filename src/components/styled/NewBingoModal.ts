@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import styles from '../constants/global-styles';
 
 export const ModalBackGround = styled.section`
   position: absolute;
