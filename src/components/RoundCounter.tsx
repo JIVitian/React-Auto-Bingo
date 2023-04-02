@@ -1,13 +1,11 @@
-import { FC, memo } from 'react';
+import { memo, useContext } from 'react';
 import RoundContainer from './styled/Bingo/RoundContainer';
 import StyledBallInput from './styled/StyledBallInput';
+import { RoundContext } from './AutoBingo';
 
-interface Props {
-  round: number;
-  setRound: (round: number) => void;
-}
+const RoundCounter = () => {
+  const { round, setRound } = useContext(RoundContext);
 
-const RoundCounter: FC<Props> = ({ round, setRound }) => {
   const decreaseRound = () => {
     if (round > 1) setRound(round - 1);
   };
