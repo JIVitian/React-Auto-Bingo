@@ -3,7 +3,7 @@ import RoundCounter from './RoundCounter';
 import RandomBingoButtom from './RandomBingoButtom';
 import { StyledButton } from './styled/Global';
 import * as S from './styled/Navbar';
-import { FC, useContext } from 'react';
+import { FC, memo, useContext } from 'react';
 import { Bingo } from '../types/Bingo';
 import { RoundContext } from './AutoBingo';
 
@@ -34,4 +34,4 @@ const Navbar: FC<Props> = ({ toggleModal, handleBallChange, addNewBingo }) => {
   );
 };
 
-export default Navbar;
+export default memo(Navbar);

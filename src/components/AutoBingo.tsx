@@ -1,4 +1,4 @@
-import { createContext, useCallback, useState } from 'react';
+import { createContext, useCallback, useReducer, useState } from 'react';
 import Bingo from './Bingo';
 import NewBingoModal from './NewBingoModal';
 import Grid from './styled/Grid';
@@ -6,37 +6,43 @@ import Main from './styled/Main';
 import { Bingo as BingoModel, BingoNumber } from '../types/Bingo';
 import { RoundContextType } from '../types/ContextTypes';
 import Navbar from './Navbar';
+import { bingoReducer } from '../reducers/bingo/bingoReducer';
+import { BingoActionTypes } from '../reducers/bingo/actions/bingo-actions-types';
+import { initalBingos } from '../reducers/bingo/initialBingo';
 
 export const RoundContext = createContext({} as RoundContextType);
 
 const AutoBingo = () => {
   const [round, setRound] = useState(1);
-  const [bingosList, setBingosList] = useState<BingoModel[]>([]);
   const [bingoToUpdate, setBingoToUpdate] = useState<Partial<BingoModel>>({});
   const [showModal, setShowModal] = useState(false);
 
-  const updateBingo = (newBingo: BingoModel) => {
-    setBingosList(list =>
-      list.map(bingo =>
-        bingo.bingoId === bingoToUpdate.bingoId ? newBingo : bingo
-      )
-    );
+  const [bingosList, dispatch] = useReducer(bingoReducer, initalBingos);
 
+  const updateBingo = (bingo: BingoModel) => {
+    dispatch({
+      type: BingoActionTypes.Update,
+      payload: { bingoToUpdate: bingoToUpdate as BingoModel, newBingo: bingo },
+    });
     setBingoToUpdate({});
   };
 
-  const addNewBingo = (newBingo: BingoModel) => {
+  const addNewBingo = useCallback((newBingo: BingoModel) => {
+    dispatch({ type: BingoActionTypes.Add, payload: newBingo });
+  }, []);
+
+  const handleNewBingo = (newBingo: BingoModel) => {
+    if (bingoToUpdate?.bingoId) {
+      updateBingo(newBingo);
+      return;
+    }
+
     if (bingosList.some(bingo => bingo.bingoId === newBingo.bingoId)) {
       alert('Ya existe un bingo con ese número');
       return;
     }
 
-    setBingosList(list => [...list, newBingo]);
-  };
-
-  const handleNewBingo = (newBingo: BingoModel) => {
-    if (bingoToUpdate?.bingoId) updateBingo(newBingo);
-    else addNewBingo(newBingo);
+    addNewBingo(newBingo);
   };
 
   const onBingoEdit = useCallback((bingo: BingoModel) => {
@@ -45,7 +51,10 @@ const AutoBingo = () => {
   }, []);
 
   const handleBingoDelete = useCallback((bingoId: BingoNumber) => {
-    setBingosList(list => list.filter(b => b.bingoId !== bingoId));
+    dispatch({
+      type: BingoActionTypes.Delete,
+      payload: { bingoId } as BingoModel,
+    });
   }, []);
 
   const toggleModal = () => {
@@ -61,23 +70,10 @@ const AutoBingo = () => {
   // Update the grid of every bingo when the ball value changes
   const handleBallChange = useCallback(
     (newBall: BingoNumber, currentRound: number) => {
-      if (!newBall || !currentRound) return;
-
-      setBingosList(list =>
-        list
-          .map(({ bingoId, numbers, grid }) => {
-            const col = numbers.indexOf(+newBall);
-
-            if (col !== -1) grid[currentRound - 1][col] = true;
-
-            return { bingoId, numbers, grid };
-          })
-          .sort(
-            (a, b) =>
-              b.grid[currentRound - 1].filter(cell => cell).length -
-              a.grid[currentRound - 1].filter(cell => cell).length
-          )
-      );
+      dispatch({
+        type: BingoActionTypes.Play,
+        payload: { newBall, currentRound },
+      });
     },
     []
   );
