@@ -3,9 +3,9 @@ import RoundCounter from './RoundCounter';
 import RandomBingoButtom from './RandomBingoButtom';
 import { StyledButton } from './styled/Global';
 import * as S from './styled/Navbar';
-import { FC, memo, useContext } from 'react';
+import { FC, memo } from 'react';
 import { Bingo } from '../types/Bingo';
-import { RoundContext } from './AutoBingo';
+import { useRoundContext } from '../context/roundContext';
 
 interface Props {
   toggleModal: () => void;
@@ -14,7 +14,7 @@ interface Props {
 }
 
 const Navbar: FC<Props> = ({ toggleModal, handleBallChange, addNewBingo }) => {
-  const { round } = useContext(RoundContext);
+  const { round } = useRoundContext();
 
   return (
     <S.Navbar>

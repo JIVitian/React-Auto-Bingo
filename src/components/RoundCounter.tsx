@@ -1,10 +1,10 @@
-import { memo, useContext } from 'react';
+import { memo } from 'react';
 import RoundContainer from './styled/Bingo/RoundContainer';
 import StyledBallInput from './styled/StyledBallInput';
-import { RoundContext } from './AutoBingo';
+import { useRoundContext } from '../context/roundContext';
 
 const RoundCounter = () => {
-  const { round, setRound } = useContext(RoundContext);
+  const { round, setRound } = useRoundContext();
 
   const decreaseRound = () => {
     if (round > 1) setRound(round - 1);

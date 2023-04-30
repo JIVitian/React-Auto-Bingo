@@ -26,12 +26,10 @@ export const bingoReducer = (
       if (!newBall || !currentRound) return state;
 
       return state
-        .map(({ bingoId, numbers, grid }) => {
-          const col = numbers.indexOf(+newBall);
-
-          if (col >= 0) grid[currentRound - 1][col] = true;
-
-          return { bingoId, numbers, grid };
+        .map(bingo => {
+          const col = bingo.numbers.indexOf(+newBall);
+          if (col >= 0) bingo.grid[currentRound - 1][col] = true;
+          return bingo;
         })
         .sort(
           (a, b) =>

@@ -1,16 +1,14 @@
-import { createContext, useCallback, useReducer, useState } from 'react';
+import { useCallback, useReducer, useState } from 'react';
 import Bingo from './Bingo';
 import NewBingoModal from './NewBingoModal';
 import Grid from './styled/Grid';
 import Main from './styled/Main';
 import { Bingo as BingoModel, BingoNumber } from '../types/Bingo';
-import { RoundContextType } from '../types/ContextTypes';
 import Navbar from './Navbar';
 import { bingoReducer } from '../reducers/bingo/bingoReducer';
 import { BingoActionTypes } from '../reducers/bingo/actions/bingo-actions-types';
 import { initalBingos } from '../reducers/bingo/initialBingo';
-
-export const RoundContext = createContext({} as RoundContextType);
+import { RoundContext } from '../context/roundContext';
 
 const AutoBingo = () => {
   const [round, setRound] = useState(1);
