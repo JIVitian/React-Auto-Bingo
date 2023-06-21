@@ -3,6 +3,8 @@ import BingoTable from './styled/Bingo/BingoTable';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faPen } from '@fortawesome/free-solid-svg-icons';
 import { Bingo as BingoModel } from '../types/Bingo';
+import { useBingoReducerContext } from '../context/bingoReducerContext';
+import { BingoActionTypes } from '../reducers/bingo/actions/bingo-actions-types';
 
 interface Props {
   bingoId: BingoModel['bingoId'];
@@ -16,9 +18,17 @@ const Bingo: React.FC<Props> = ({
   bingoId,
   numbers,
   grid,
-  onDelete,
+  // onDelete,
   onEdit,
 }) => {
+  const { dispatch } = useBingoReducerContext();
+
+  const onDelete = (bingoId: BingoModel['bingoId']) =>
+    dispatch({
+      type: BingoActionTypes.Delete,
+      payload: bingoId,
+    });
+
   return (
     <article>
       <BingoHeader>

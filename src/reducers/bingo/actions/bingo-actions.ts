@@ -14,7 +14,7 @@ interface BingoPlayPayload {
 
 type AddAction = Action<BingoActionTypes.Add, Bingo>;
 type UpdateAction = Action<BingoActionTypes.Update, BingoUpdatePayload>;
-type DeleteAction = Action<BingoActionTypes.Delete, Bingo>;
+type DeleteAction = Action<BingoActionTypes.Delete, Bingo['bingoId']>;
 type LoadAction = Action<BingoActionTypes.Load, Bingo[]>;
 type PlayAction = Action<BingoActionTypes.Play, BingoPlayPayload>;
 

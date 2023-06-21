@@ -9,6 +9,7 @@ import { bingoReducer } from '../reducers/bingo/bingoReducer';
 import { BingoActionTypes } from '../reducers/bingo/actions/bingo-actions-types';
 import { initalBingos } from '../reducers/bingo/initialBingo';
 import { RoundContext } from '../context/roundContext';
+import { BingoReducerContext } from '../context/bingoReducerContext';
 
 const AutoBingo = () => {
   const [round, setRound] = useState(1);
@@ -25,10 +26,6 @@ const AutoBingo = () => {
     setBingoToUpdate({});
   };
 
-  const addNewBingo = useCallback((newBingo: BingoModel) => {
-    dispatch({ type: BingoActionTypes.Add, payload: newBingo });
-  }, []);
-
   const handleNewBingo = (newBingo: BingoModel) => {
     if (bingoToUpdate?.bingoId) {
       updateBingo(newBingo);
@@ -40,7 +37,7 @@ const AutoBingo = () => {
       return;
     }
 
-    addNewBingo(newBingo);
+    dispatch({ type: BingoActionTypes.Add, payload: newBingo });
   };
 
   const onBingoEdit = useCallback((bingo: BingoModel) => {
@@ -48,10 +45,10 @@ const AutoBingo = () => {
     setBingoToUpdate(bingo);
   }, []);
 
-  const handleBingoDelete = useCallback((bingoId: BingoNumber) => {
+  const handleBingoDelete = useCallback((bingoId: number) => {
     dispatch({
       type: BingoActionTypes.Delete,
-      payload: { bingoId } as BingoModel,
+      payload: bingoId,
     });
   }, []);
 
@@ -78,34 +75,35 @@ const AutoBingo = () => {
 
   return (
     <>
-      <RoundContext.Provider value={{ round, setRound }}>
-        <Navbar
-          toggleModal={toggleModal}
-          addNewBingo={addNewBingo}
-          handleBallChange={handleBallChange}
-        />
-      </RoundContext.Provider>
-      <Main>
-        {showModal && (
-          <NewBingoModal
-            handleSubmit={handleNewBingo}
-            bingo={bingoToUpdate as BingoModel}
-            onCloseCallback={closeModal}
+      <BingoReducerContext.Provider value={{ bingosList, dispatch }}>
+        <RoundContext.Provider value={{ round, setRound }}>
+          <Navbar
+            toggleModal={toggleModal}
+            handleBallChange={handleBallChange}
           />
-        )}
-        <Grid>
-          {bingosList.map(({ bingoId, numbers, grid }) => (
-            <Bingo
-              key={bingoId}
-              bingoId={bingoId}
-              numbers={numbers}
-              grid={grid}
-              onDelete={handleBingoDelete}
-              onEdit={onBingoEdit}
+        </RoundContext.Provider>
+        <Main>
+          {showModal && (
+            <NewBingoModal
+              handleSubmit={handleNewBingo}
+              bingo={bingoToUpdate as BingoModel}
+              onCloseCallback={closeModal}
             />
-          ))}
-        </Grid>
-      </Main>
+          )}
+          <Grid>
+            {bingosList.map(({ bingoId, numbers, grid }) => (
+              <Bingo
+                key={bingoId}
+                bingoId={bingoId}
+                numbers={numbers}
+                grid={grid}
+                onDelete={handleBingoDelete}
+                onEdit={onBingoEdit}
+              />
+            ))}
+          </Grid>
+        </Main>
+      </BingoReducerContext.Provider>
     </>
   );
 };

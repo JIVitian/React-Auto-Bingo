@@ -1,23 +1,25 @@
-import { FC, memo } from 'react';
-import { Bingo } from '../types/Bingo';
+import { memo } from 'react';
 import { createEmptyGrid } from '../utils/grid-utils';
 import { StyledButton } from './styled/Global';
+import { useBingoReducerContext } from '../context/bingoReducerContext';
+import { BingoActionTypes } from '../reducers/bingo/actions/bingo-actions-types';
 
-interface Props {
-  newBingoCallback: (bingo: Bingo) => void;
-}
+const RandomBingoButton = () => {
+  const { dispatch } = useBingoReducerContext();
 
-const RandomBingoButton: FC<Props> = ({ newBingoCallback }) => {
   const newRandomBingo = () => {
     const existentNumbers = new Set<number>();
 
     while (existentNumbers.size < 10)
       existentNumbers.add(Math.round(Math.random() * 89 + 1));
 
-    newBingoCallback({
-      bingoId: Math.round(Math.random() * 9999 + 1),
-      numbers: Array.from(existentNumbers).sort((a, b) => a - b),
-      grid: createEmptyGrid(),
+    dispatch({
+      type: BingoActionTypes.Add,
+      payload: {
+        bingoId: Math.round(Math.random() * 9999 + 1),
+        numbers: Array.from(existentNumbers).sort((a, b) => a - b),
+        grid: createEmptyGrid(),
+      },
     });
   };
 

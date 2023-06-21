@@ -16,7 +16,7 @@ export const bingoReducer = (
           : bingo
       );
     case BingoActionTypes.Delete:
-      return state.filter(bingo => bingo.bingoId !== payload.bingoId);
+      return state.filter(bingo => bingo.bingoId !== payload);
     case BingoActionTypes.Load:
       // Change the list of bingos to the list of bingos from the payload
       return payload;
